@@ -1,310 +1,374 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>FeXecutioner | Trading Console</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #D1D4DC; /* Your Chart Background */
-    --panel: #FFFFFF; /* Upclose Candle / Clean Surface */
-    --panel-alt: #f0f1f4;
-    --line: #787B86; /* Downclose / Muted Borders */
-    --ink: #050505;
-    --ink-dim: #34363b;
-    --ink-faint: #686b72;
-    --accent: #050505;
-    --green: #2ebd85; /* Trading Green */
-    --red: #f23645; /* Trading Red */
-    --mono: 'JetBrains Mono', monospace;
-    --disp: 'Chakra Petch', sans-serif;
-    --body: 'Inter', sans-serif;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FeXecutioner is a structured futures trading mentorship for deliberate, repeatable execution.">
+  <title>FeXecutioner | Futures Trading Mentorship</title>
+  <style>
+    :root {
+      --canvas: #d1d4dc;
+      --ink: #050505;
+      --muted: #34363b;
+      --quiet: #686b72;
+      --line: #ffffff;
+      --line-soft: rgba(255, 255, 255, 0.72);
+      --panel: rgba(255, 255, 255, 0.3);
+      --panel-solid: rgba(255, 255, 255, 0.66);
+      --font-ui: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+    }
 
-  * { box-sizing: border-box; }
-  body {
-    background-color: var(--bg);
-    color: var(--ink);
-    font-family: var(--body);
-    margin: 0;
-    padding: 20px;
-    line-height: 1.5;
-  }
-  .wrap { max-width: 900px; margin: 0 auto; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-width: 320px;
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--font-ui);
+      line-height: 1.5;
+      position: relative;
+      isolation: isolate;
+    }
+    body::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 54px 0 0;
+      background-image: url("data:image/svg+xml,%3Csvg%20width%3D%222048%22%20height%3D%225000%22%20viewBox%3D%220%200%202048%205000%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3Cmarker%20id%3D%22arrow%22%20markerWidth%3D%2210%22%20markerHeight%3D%2210%22%20refX%3D%225%22%20refY%3D%225%22%20orient%3D%22auto%22%3E%3Cpath%20d%3D%22M0%200%20L10%205%20L0%2010%20Z%22%20fill%3D%22%23ffffff%22%20opacity%3D%221%22%2F%3E%3C%2Fmarker%3E%3C%2Fdefs%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%225%22%3E%3Cpath%20opacity%3D%22.7%22%20stroke-width%3D%225%22%20d%3D%22M-40%20640%20C%20260%20560%2C%20420%20760%2C%20640%20700%20S%20980%20420%2C%201180%20520%20S%201500%20900%2C%201720%20760%20S%202000%20500%2C%202160%20560%22%2F%3E%3Crect%20opacity%3D%22.85%22%20x%3D%221500%22%20y%3D%22230%22%20width%3D%22230%22%20height%3D%22150%22%20rx%3D%224%22%20stroke-width%3D%224%22%20stroke-dasharray%3D%2212%2010%22%2F%3E%3Cpath%20opacity%3D%22.88%22%20stroke-width%3D%224%22%20d%3D%22M1360%20305%20L1500%20305%20M1500%20230%20V380%22%2F%3E%3Crect%20opacity%3D%22.82%22%20x%3D%22130%22%20y%3D%222040%22%20width%3D%22210%22%20height%3D%22128%22%20rx%3D%224%22%20stroke-width%3D%224%22%20stroke-dasharray%3D%2212%2010%22%2F%3E%3Cpath%20opacity%3D%22.85%22%20stroke-width%3D%224%22%20d%3D%22M340%202104%20L470%202104%22%2F%3E%3Crect%20opacity%3D%22.85%22%20x%3D%22280%22%20y%3D%223600%22%20width%3D%22240%22%20height%3D%22150%22%20rx%3D%224%22%20stroke-width%3D%224%22%20stroke-dasharray%3D%2212%2010%22%2F%3E%3Cpath%20opacity%3D%22.88%22%20stroke-width%3D%224%22%20d%3D%22M520%203650%20H760%20M520%203600%20V3750%22%2F%3E%3Crect%20opacity%3D%22.8%22%20x%3D%221600%22%20y%3D%224520%22%20width%3D%22200%22%20height%3D%22120%22%20rx%3D%224%22%20stroke-width%3D%224%22%20stroke-dasharray%3D%2212%2010%22%2F%3E%3Cpath%20opacity%3D%22.85%22%20stroke-width%3D%224%22%20d%3D%22M1800%204580%20H1940%22%2F%3E%3Cg%20opacity%3D%22.85%22%20transform%3D%22translate%28150%20170%29%20rotate%28-4%29%22%3E%3Cline%20x1%3D%225%22%20y1%3D%22-22%22%20x2%3D%225%22%20y2%3D%2288%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%224%22%20width%3D%2210%22%20height%3D%2246%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%2238%22%20y1%3D%22-6%22%20x2%3D%2238%22%20y2%3D%2264%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2233%22%20y%3D%2214%22%20width%3D%2210%22%20height%3D%2226%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%2271%22%20y1%3D%22-34%22%20x2%3D%2271%22%20y2%3D%2252%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2266%22%20y%3D%22-16%22%20width%3D%2210%22%20height%3D%2254%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%22104%22%20y1%3D%22-8%22%20x2%3D%22104%22%20y2%3D%2270%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2299%22%20y%3D%2216%22%20width%3D%2210%22%20height%3D%2234%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%22137%22%20y1%3D%22-28%22%20x2%3D%22137%22%20y2%3D%2230%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%22132%22%20y%3D%22-12%22%20width%3D%2210%22%20height%3D%2230%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3C%2Fg%3E%3Cg%20opacity%3D%22.78%22%20transform%3D%22translate%281660%201020%29%20rotate%286%29%22%3E%3Cline%20x1%3D%225%22%20y1%3D%22-24%22%20x2%3D%225%22%20y2%3D%2246%22%20stroke-width%3D%224.5%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%22-6%22%20width%3D%2212%22%20height%3D%2234%22%20rx%3D%221%22%20stroke-width%3D%224.5%22%2F%3E%3Cline%20x1%3D%2242%22%20y1%3D%22-52%22%20x2%3D%2242%22%20y2%3D%2222%22%20stroke-width%3D%224.5%22%2F%3E%3Crect%20x%3D%2236%22%20y%3D%22-36%22%20width%3D%2212%22%20height%3D%2242%22%20rx%3D%221%22%20stroke-width%3D%224.5%22%2F%3E%3C%2Fg%3E%3Cpath%20opacity%3D%22.78%22%20stroke-width%3D%225%22%20d%3D%22M190%201560%20L560%201360%22%20marker-end%3D%22url%28%23arrow%29%22%2F%3E%3Cpath%20opacity%3D%22.82%22%20stroke-width%3D%224%22%20d%3D%22M160%201500%20H560%20M160%201660%20H560%22%20stroke-dasharray%3D%2210%209%22%2F%3E%3Cg%20opacity%3D%22.85%22%20transform%3D%22translate%281420%202660%29%20rotate%28-3%29%22%3E%3Cline%20x1%3D%225%22%20y1%3D%22-26%22%20x2%3D%225%22%20y2%3D%2258%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%22-8%22%20width%3D%2210%22%20height%3D%2238%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%2238%22%20y1%3D%226%22%20x2%3D%2238%22%20y2%3D%2286%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2233%22%20y%3D%2224%22%20width%3D%2210%22%20height%3D%2236%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%2271%22%20y1%3D%22-14%22%20x2%3D%2271%22%20y2%3D%2264%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2266%22%20y%3D%226%22%20width%3D%2210%22%20height%3D%2234%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%22104%22%20y1%3D%22-50%22%20x2%3D%22104%22%20y2%3D%2226%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2299%22%20y%3D%22-32%22%20width%3D%2210%22%20height%3D%2240%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3C%2Fg%3E%3Cpath%20opacity%3D%22.78%22%20stroke-width%3D%225%22%20d%3D%22M1780%203400%20L1400%203200%22%20marker-end%3D%22url%28%23arrow%29%22%2F%3E%3Cg%20opacity%3D%22.82%22%20transform%3D%22translate%281560%204320%29%20rotate%284%29%22%3E%3Cline%20x1%3D%225%22%20y1%3D%22-18%22%20x2%3D%225%22%20y2%3D%2256%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%222%22%20width%3D%2210%22%20height%3D%2232%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%2238%22%20y1%3D%22-44%22%20x2%3D%2238%22%20y2%3D%2226%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2233%22%20y%3D%22-26%22%20width%3D%2210%22%20height%3D%2236%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%2271%22%20y1%3D%22-2%22%20x2%3D%2271%22%20y2%3D%2270%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2266%22%20y%3D%2216%22%20width%3D%2210%22%20height%3D%2238%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3C%2Fg%3E%3Cg%20opacity%3D%22.8%22%20transform%3D%22translate%28220%203120%29%20rotate%285%29%22%3E%3Cline%20x1%3D%225%22%20y1%3D%22-16%22%20x2%3D%225%22%20y2%3D%2250%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2210%22%20height%3D%2230%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%2238%22%20y1%3D%22-36%22%20x2%3D%2238%22%20y2%3D%2220%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2233%22%20y%3D%22-20%22%20width%3D%2210%22%20height%3D%2232%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3Cline%20x1%3D%2271%22%20y1%3D%224%22%20x2%3D%2271%22%20y2%3D%2266%22%20stroke-width%3D%224%22%2F%3E%3Crect%20x%3D%2266%22%20y%3D%2222%22%20width%3D%2210%22%20height%3D%2230%22%20rx%3D%221%22%20stroke-width%3D%224%22%2F%3E%3C%2Fg%3E%3Cpath%20opacity%3D%22.76%22%20stroke-width%3D%225%22%20d%3D%22M1900%204180%20L1560%204380%22%20marker-end%3D%22url%28%23arrow%29%22%2F%3E%3Cpath%20opacity%3D%22.62%22%20stroke-width%3D%224.5%22%20d%3D%22M60%204780%20C%20320%204700%2C%20520%204860%2C%20780%204800%22%2F%3E%3Cg%20opacity%3D%22.65%22%20stroke-width%3D%221%22%3E%3Ccircle%20cx%3D%221900%22%20cy%3D%22180%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%221960%22%20cy%3D%22180%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%222020%22%20cy%3D%22180%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%221900%22%20cy%3D%22230%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%221960%22%20cy%3D%22230%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%222020%22%20cy%3D%22230%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%221900%22%20cy%3D%22280%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%221960%22%20cy%3D%22280%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%222020%22%20cy%3D%22280%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%224460%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%22140%22%20cy%3D%224460%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%224460%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%224510%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%22140%22%20cy%3D%224510%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%224510%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%224560%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%22140%22%20cy%3D%224560%22%20r%3D%225%22%2F%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%224560%22%20r%3D%225%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: 100% auto;
+      pointer-events: none;
+    }
+    body > * { position: relative; z-index: 1; }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
 
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    border-bottom: 2px solid var(--accent);
-    padding-bottom: 10px;
-    margin-bottom: 30px;
-  }
-  .brand h1 { font-family: var(--disp); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-  .telemetry { text-align: right; font-family: var(--mono); font-size: 13px; }
+    .shell { width: min(100% - 40px, 660px); margin: 0 auto; }
+    .site-header {
+      height: 54px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: rgba(209, 212, 220, 0.9);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(100% - 40px, 690px);
+      height: 100%;
+      margin: 0 auto;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--ink);
+      font: 700 11px/1 var(--font-mono);
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .brand-mark {
+      position: relative;
+      width: 30px;
+      height: 20px;
+    }
+    .brand-mark::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 12px;
+      width: 6px;
+      height: 12px;
+      background: var(--canvas);
+      border: 1px solid currentColor;
+      z-index: 2;
+    }
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 15px;
+      width: 2px;
+      height: 20px;
+      margin-left: -1px;
+      background: currentColor;
+      z-index: 1;
+    }
+    .execution-line { position: absolute; top: 10px; right: 0; left: 0; height: 1px; background: currentColor; z-index: 1; }
+    .execution-arrow { position: absolute; top: 7px; right: 0; width: 6px; height: 6px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); z-index: 1; }
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--ink);
+      border-radius: 6px;
+      padding: 8px 13px;
+      font: 700 10px/1 var(--font-mono);
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+    .nav-link:hover { background: var(--ink); color: var(--line); box-shadow: 0 4px 14px rgba(5, 5, 5, 0.22); transform: translateY(-1px); }
+    .nav-link .arrow { transition: transform 160ms ease; }
+    .nav-link:hover .arrow { transform: translateX(3px); }
 
-  /* Master Status */
-  .master {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    position: relative;
-    box-shadow: 4px 4px 0px var(--line);
-  }
-  .m-status { font-family: var(--disp); font-size: 40px; font-weight: 700; line-height: 1; }
-  #execution-alert { 
-    display: none; 
-    background: var(--ink); 
-    color: var(--panel); 
-    padding: 10px; 
-    text-align: center; 
-    font-family: var(--mono); 
-    font-weight: bold; 
-    margin-top: 15px;
-    text-transform: uppercase;
-    animation: blink 1s infinite;
-  }
-  @keyframes blink { 50% { opacity: 0.5; } }
+    .hero { padding: 76px 0 66px; text-align: center; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--ink);
+      font: 700 11px/1.25 var(--font-mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 18px; border-top: 1px solid currentColor; }
+    .hero-eyebrow::before { display: block; }
+    .hero-eyebrow::after { content: ""; width: 18px; border-top: 1px solid currentColor; }
+    .step-label::before { display: none; }
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      max-width: 620px;
+      margin: 24px auto 0;
+      font-size: clamp(37px, 4.4vw, 54px);
+      font-weight: 650;
+      letter-spacing: 0;
+      line-height: 0.98;
+    }
+    h1 strong { font-weight: 800; text-decoration: underline; text-underline-offset: 6px; }
+    .hero-copy { max-width: 490px; margin: 22px auto 0; color: var(--muted); font-size: 14px; }
 
-  /* Layout */
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .section-title { 
-    grid-column: 1 / -1; 
-    font-family: var(--disp); 
-    text-transform: uppercase; 
-    border-left: 5px solid var(--accent); 
-    padding-left: 10px; 
-    margin-top: 20px;
-  }
+    .availability { margin: 34px auto 0; }
+    .spots { font-size: 16px; font-weight: 700; }
+    .spots b { text-decoration: underline; text-underline-offset: 3px; }
+    .waitlist-label { margin-top: 8px; color: var(--quiet); font: 700 9px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; }
+    .countdown { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+    .count-unit { width: 54px; padding: 11px 3px 8px; border: 1px solid var(--ink); border-radius: 6px; background: var(--ink); color: var(--line); box-shadow: 0 6px 16px rgba(5, 5, 5, 0.16); }
+    .count-number { display: block; font: 700 21px/1 var(--font-mono); }
+    .count-name { display: block; margin-top: 7px; color: rgba(255, 255, 255, 0.72); font: 700 7px/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
 
-  .panel { background: var(--panel); border: 1px solid var(--line); padding: 15px; border-radius: 4px; }
-  .check { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; cursor: pointer; padding: 5px; border-radius: 3px; }
-  .check:hover { background: var(--panel-alt); }
-  .check input { width: 18px; height: 18px; accent-color: var(--ink); }
+    section { padding: 66px 0; }
+    .step-label { justify-content: center; margin-bottom: 21px; }
+    .step-number { display: inline-grid; place-items: center; width: 19px; height: 19px; border: 1px solid currentColor; border-radius: 50%; font-size: 10px; letter-spacing: 0; }
+    .section-title { text-align: center; font-size: clamp(25px, 3.2vw, 34px); line-height: 1.08; font-weight: 700; }
+    .section-copy { max-width: 500px; margin: 13px auto 0; color: var(--muted); font-size: 14px; text-align: center; }
 
-  /* Journaling Styles */
-  textarea, input[type="text"], input[type="number"] {
-    width: 100%;
-    border: 1px solid var(--line);
-    padding: 8px;
-    font-family: var(--body);
-    margin-top: 5px;
-    background: var(--panel-alt);
-  }
-  .field-group { margin-bottom: 15px; }
-  label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ink-faint); font-family: var(--mono); }
+    .video-frame {
+      position: relative;
+      display: grid;
+      width: min(100%, 610px);
+      aspect-ratio: 16 / 9;
+      margin: 31px auto 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: repeating-linear-gradient(0deg, rgba(5, 5, 5, 0.08) 0 1px, transparent 1px 48px), var(--panel-solid);
+      place-items: center;
+    }
+    .video-frame::before { content: "MENTORSHIP WALKTHROUGH"; position: absolute; top: 14px; left: 16px; color: var(--quiet); font: 700 8px/1 var(--font-mono); letter-spacing: 0.13em; }
+    .play-button { display: grid; width: 66px; height: 66px; border: 0; border-radius: 10px; background: var(--ink); color: var(--line); cursor: pointer; place-items: center; box-shadow: 0 8px 20px rgba(5, 5, 5, 0.18); transition: transform 160ms ease, box-shadow 160ms ease; }
+    .play-button:hover { transform: scale(1.05); box-shadow: 0 12px 26px rgba(5, 5, 5, 0.26); }
+    .play-icon { width: 0; height: 0; margin-left: 4px; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 18px solid currentColor; }
+    .video-caption { position: absolute; bottom: 13px; left: 16px; color: var(--quiet); font: 600 9px/1 var(--font-mono); letter-spacing: 0.07em; }
 
-  .btn-row { grid-column: 1 / -1; display: flex; gap: 10px; margin-top: 20px; }
-  button {
-    padding: 12px 24px;
-    font-family: var(--mono);
-    font-weight: bold;
-    cursor: pointer;
-    border: 1px solid var(--accent);
-    text-transform: uppercase;
-  }
-  .btn-save { background: var(--ink); color: var(--panel); }
-  .btn-reset { background: transparent; color: var(--ink-faint); border-color: var(--line); }
+    .primary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 50px;
+      min-width: 192px;
+      margin-top: 28px;
+      padding: 0 23px;
+      background: var(--ink);
+      color: var(--line);
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 8px;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 6px 18px rgba(5, 5, 5, 0.12);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .primary-action:hover { transform: translateY(-2px); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 12px 26px rgba(5, 5, 5, 0.22); }
+    .primary-action .arrow { transition: transform 160ms ease; }
+    .primary-action:hover .arrow { transform: translateX(4px); }
+    .action-wrap { text-align: center; }
 
-  #trade-log {
-    margin-top: 40px;
-    grid-column: 1 / -1;
-    background: #fff;
-    border: 1px solid var(--line);
-    padding: 20px;
-  }
-  .log-entry { border-bottom: 1px solid var(--line); padding: 10px 0; font-size: 13px; }
+    .program-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 31px; border: 1px solid var(--line); background: var(--line); }
+    .program-item { min-height: 190px; padding: 22px; background: rgba(209, 212, 220, 0.76); box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 10px 24px -18px rgba(5,5,5,0.35); transition: transform 200ms ease, box-shadow 200ms ease; }
+    .program-item:hover { transform: translateY(-3px); box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 16px 28px -16px rgba(5,5,5,0.4); }
+    .program-item:hover { background: rgba(255, 255, 255, 0.5); box-shadow: inset 0 0 0 1px rgba(5, 5, 5, 0.08); }
+    .program-code { font: 700 10px/1 var(--font-mono); letter-spacing: 0.12em; }
+    .program-item h3 { margin-top: 30px; font-size: 16px; font-weight: 750; }
+    .program-item p { margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .one-to-one { margin-top: 12px; font: 700 10px/1.35 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
+    .curriculum-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; margin-top: 26px; border: 1px solid var(--line); background: var(--line); }
+    .curriculum-module { display: flex; align-items: flex-start; gap: 15px; min-height: 72px; padding: 15px 18px; background: rgba(209, 212, 220, 0.76); box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset; transition: background 160ms ease, transform 160ms ease; }
+    .curriculum-module:hover { background: rgba(209, 212, 220, 0.95); transform: translateY(-2px); }
+    .curriculum-module:hover { background: rgba(255, 255, 255, 0.5); }
+    .module-number { flex: 0 0 auto; padding-top: 2px; font: 700 10px/1 var(--font-mono); }
+    .module-title { font-size: 14px; font-weight: 750; }
+    .module-detail { margin-top: 2px; color: var(--muted); font-size: 12px; }
 
-  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-</style>
+    .results-section { padding-top: 78px; }
+    .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 33px; }
+    .proof-slot { min-height: 205px; border: 1px dashed rgba(5, 5, 5, 0.35); border-radius: 8px; background: rgba(255, 255, 255, 0.28); box-shadow: 0 8px 20px -16px rgba(5,5,5,0.3); }
+    .proof-slot:nth-child(2), .proof-slot:nth-child(5) { min-height: 275px; }
+
+    .application { padding-top: 73px; }
+    .application-box { max-width: 490px; margin: 0 auto; text-align: center; }
+    .form-note { margin-top: 13px; color: var(--muted); font-size: 13px; }
+
+    .form-embed { width: min(100%, 680px); min-height: 690px; margin: 35px auto 0; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-solid); }
+    .form-embed iframe { display: block; width: 100%; min-height: 690px; border: 0; background: var(--line); }
+
+    .terms-section { padding-top: 76px; padding-bottom: 54px; }
+    .terms { max-width: 550px; margin: 0 auto; color: var(--muted); font-size: 11px; line-height: 1.72; }
+    .terms p + p { margin-top: 10px; }
+    .terms-heading { margin-bottom: 13px; color: var(--ink); font: 700 10px/1.4 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; }
+    footer { border-top: 1px solid var(--line); padding: 28px 20px 35px; color: var(--quiet); font: 700 9px/1 var(--font-mono); letter-spacing: 0.12em; text-align: center; text-transform: uppercase; }
+
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 32px, 660px); }
+      .header-inner { width: min(100% - 32px, 690px); }
+      .brand-text { display: none; }
+      .hero { padding-top: 58px; }
+      section { padding: 52px 0; }
+      .program-grid { grid-template-columns: 1fr; }
+      .program-item { min-height: auto; }
+      .program-item h3 { margin-top: 18px; }
+      .curriculum-list { grid-template-columns: 1fr; }
+      .results-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
 </head>
 <body>
-
-<div class="wrap">
-  <header>
-    <div class="brand">
-      <h1>FeXecutioner</h1>
-      <div style="font-family:var(--mono); font-size: 10px;">Execution Console v2.0</div>
-    </div>
-    <div class="telemetry">
-      <div id="clock">00:00:00</div>
-      <div id="date">-- --- ----</div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="FeXecutioner home"><span class="brand-mark" aria-hidden="true"><span class="execution-line"></span><span class="execution-arrow"></span></span><span class="brand-text">FeXecutioner</span></a>
+      <a class="nav-link" href="#form">Apply <span class="arrow" aria-hidden="true">-&gt;</span></a>
     </div>
   </header>
 
-  <section class="master" id="master">
-    <div class="m-status" id="mstatus">WAITING...</div>
-    <div id="execution-alert">IT IS EXECUTION TIME. FOLLOW YOUR RULES.</div>
-  </section>
-
-  <div class="grid">
-    <!-- PRE-TRADE -->
-    <h2 class="section-title">Pre-Trade & Execution</h2>
-    <div class="panel">
-      <label class="check"><input type="checkbox" class="step"> HTF Bias Identified (1H/4H)</label>
-      <label class="check"><input type="checkbox" class="step"> LTF Levels Respected in HTF Direction</label>
-      <label class="check"><input type="checkbox" class="step"> Manipulation/Liquidity Swept</label>
-      <label class="check"><input type="checkbox" class="step"> Inversion Gap Confirmed (1m-5m)</label>
-      <label class="check"><input type="checkbox" class="step"> R:R Positive & Target Clear</label>
-    </div>
-
-    <div class="panel">
-      <div class="field-group">
-        <label>Entry Model / Time</label>
-        <input type="text" id="entryModel" placeholder="e.g. 5m IFVG at 10:32am">
+  <main id="top">
+    <section class="hero">
+      <div class="shell">
+        <div class="eyebrow hero-eyebrow">Mentorship applications open</div>
+        <h1>From inconsistency to a <strong>process you can trust</strong> in less than 90 days.</h1>
+        <p class="hero-copy">A structured futures mentorship for traders who understand the concepts and are ready to build consistency through better decision-making, execution, and accountability.</p>
+        <div class="availability" aria-label="Cohort availability">
+          <p class="spots"><b id="spots-number">3</b> / 10 Spots Remaining</p>
+          <p class="waitlist-label">Waitlist closes 31 August 2026</p>
+          <div class="countdown" aria-live="polite">
+            <div class="count-unit"><span class="count-number" id="days">00</span><span class="count-name">Days</span></div>
+            <div class="count-unit"><span class="count-number" id="hours">00</span><span class="count-name">Hrs</span></div>
+            <div class="count-unit"><span class="count-number" id="minutes">00</span><span class="count-name">Min</span></div>
+            <div class="count-unit"><span class="count-number" id="seconds">00</span><span class="count-name">Sec</span></div>
+          </div>
+        </div>
       </div>
-      <div class="field-group">
-        <label>Risk Per Trade ($)</label>
-        <input type="number" id="riskAmount" placeholder="400">
+    </section>
+
+    <section>
+      <div class="shell">
+        <div class="eyebrow step-label">Step 1 of 3 - watch this first</div>
+        <h2 class="section-title">See how the mentorship works before you apply.</h2>
+        <p class="section-copy">A quick walkthrough of the process, the standards, and the one-to-one support inside the mentorship.</p>
+        <div class="video-frame" role="img" aria-label="Mentorship walkthrough video placeholder">
+          <button class="play-button" type="button" aria-label="Play mentorship walkthrough"><span class="play-icon" aria-hidden="true"></span></button>
+          <span class="video-caption">Add your video embed here</span>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- ANALYSIS -->
-    <h2 class="section-title">Post-Trade Analysis</h2>
-    <div class="panel">
-      <div class="field-group">
-        <label>HTF Logic</label>
-        <textarea id="htfLogic" rows="3" placeholder="What was the higher timeframe draw?"></textarea>
+    <section>
+      <div class="shell">
+        <div class="eyebrow">Inside the mentorship</div>
+        <h2 class="section-title" style="margin-top: 18px;">Your trading process, built in the right order.</h2>
+        <div class="program-grid">
+          <article class="program-item"><p class="program-code">01 / STRUCTURE</p><h3>Structure</h3><p>Read price in context: candles, liquidity, and the higher-timeframe draw that gives every lower-timeframe decision a reason.</p></article>
+          <article class="program-item"><p class="program-code">02 / PRECISION</p><h3>Precision</h3><p>Build a clean entry model around FVGs and advanced IFVGs, with conditions that tell you when to act and when to stay out.</p></article>
+          <article class="program-item"><p class="program-code">03 / EXECUTION</p><h3>Execution &amp; Psychology</h3><p>Protect the plan under pressure. Placement, management, emotional control, and review are trained together, not left to willpower.</p><p class="one-to-one">Direct 1:1 access and accountability</p></article>
+        </div>
+        <div class="curriculum-list" aria-label="Mentorship curriculum">
+          <article class="curriculum-module"><span class="module-number">01</span><div><h3 class="module-title">Candlestick Reading</h3><p class="module-detail">How to read a candle in the context of the session and current structure.</p></div></article>
+          <article class="curriculum-module"><span class="module-number">02</span><div><h3 class="module-title">Draw on Liquidity</h3><p class="module-detail">How to identify the market draw and map the targets that matter.</p></div></article>
+          <article class="curriculum-module"><span class="module-number">03</span><div><h3 class="module-title">SMTs</h3><p class="module-detail">Use relative strength and weakness to sharpen directional context.</p></div></article>
+          <article class="curriculum-module"><span class="module-number">04</span><div><h3 class="module-title">FVGs and Conditions</h3><p class="module-detail">The criteria that separate a usable fair value gap from a random one.</p></div></article>
+          <article class="curriculum-module"><span class="module-number">05</span><div><h3 class="module-title">Advanced IFVGs</h3><p class="module-detail">Take the inversion further with a precise, repeatable execution model.</p></div></article>
+          <article class="curriculum-module"><span class="module-number">06</span><div><h3 class="module-title">Stop Loss and Post-Trade Management</h3><p class="module-detail">Place risk deliberately, manage the trade objectively, and review it honestly.</p></div></article>
+        </div>
       </div>
-      <div class="field-group">
-        <label>LTF Targets</label>
-        <textarea id="ltfLogic" rows="3" placeholder="What key levels or liquidity were targeted?"></textarea>
+    </section>
+
+    <section id="form">
+      <div class="shell">
+        <div class="eyebrow step-label">Step 2 of 3 - complete your application</div>
+        <h2 class="section-title">A few questions before we speak.</h2>
+        <p class="section-copy">Complete the application and we will use your answers to make the call worthwhile.</p>
+        <div class="action-wrap"><a class="primary-action" href="https://forms.gle/LDZ8Am8S5YEYHjV9A" target="_blank" rel="noopener">Open application <span class="arrow" aria-hidden="true">-&gt;</span></a></div>
       </div>
-    </div>
+    </section>
 
-    <!-- PSYCHOLOGY -->
-    <h2 class="section-title">Psychology & Discipline</h2>
-    <div class="panel">
-      <div class="field-group">
-        <label>Routine: Wake up / Pre-Market</label>
-        <input type="text" id="routine" placeholder="e.g. 6am, workout, cold shower, meditated">
+    <section class="application">
+      <div class="shell application-box">
+        <div class="eyebrow step-label">Step 3 of 3 - book your call</div>
+        <h2 class="section-title">Work with someone who sees your process.</h2>
+        <p class="form-note">This is not a generic course. Your call is the final step, built around where your execution and psychology are breaking down.</p>
+        <!-- EDIT ME: replace # with your Calendly/booking link once you have one -->
+        <div class="action-wrap"><a class="primary-action" href="https://calendly.com/mihirramdhani/30min" target="_blank" rel="noopener">Book a call <span class="arrow" aria-hidden="true">-&gt;</span></a></div>
       </div>
-      <div class="field-group">
-        <label>Emotions (Pre/During/After)</label>
-        <textarea id="emotions" rows="3" placeholder="How did you feel at each stage?"></textarea>
+    </section>
+
+    <!-- Replace each proof slot with a student result image when it is ready. -->
+    <section class="results-section" id="student-wins">
+      <div class="shell">
+        <div class="eyebrow">Mentee proof</div>
+        <h2 class="section-title" style="margin-top: 18px;">The work shows up on the charts.</h2>
+        <div class="results-grid" aria-label="Mentee proof gallery">
+          <div class="proof-slot"></div>
+          <div class="proof-slot"></div>
+          <div class="proof-slot"></div>
+          <div class="proof-slot"></div>
+          <div class="proof-slot"></div>
+          <div class="proof-slot"></div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="panel">
-      <label class="check"><input type="checkbox" class="step"> Followed All Rules</label>
-      <label class="check"><input type="checkbox" class="step"> Managed Emotions Well</label>
-      <div class="field-group" style="margin-top:10px;">
-        <label>Mistakes / Improvements</label>
-        <textarea id="improvements" rows="4" placeholder="What rules were broken? What can be done better?"></textarea>
+    <section class="terms-section">
+      <div class="shell">
+        <div class="terms">
+          <p class="terms-heading">Terms and disclosures</p>
+          <p>All payments for FeXecutioner are final and non-refundable once your spot is confirmed, except where explicitly stated in your enrollment agreement.</p>
+          <p>Trading futures and other financial instruments carries substantial risk of loss and is not suitable for every individual. Nothing on this page or in associated videos, calls, or materials is financial or investment advice, or a guarantee of income, profit, or trading performance. Any results referenced are individual outcomes and are not typical or guaranteed.</p>
+          <p>FeXecutioner is an educational and coaching program. It does not provide signals, managed accounts, or promises of funded status or payout. Enrollment does not guarantee passing a prop firm evaluation or receiving a payout.</p>
+        </div>
       </div>
-    </div>
+    </section>
+  </main>
 
-    <div class="btn-row">
-      <button class="btn-save" onclick="saveTrade()">Save Trade to Log</button>
-      <button class="btn-reset" onclick="resetAll()">Reset for Next Trade</button>
-    </div>
+  <footer>FeXecutioner &copy; <span id="year"></span></footer>
 
-    <!-- HISTORY -->
-    <div id="trade-log">
-      <h2 style="font-family:var(--disp); margin-top:0;">Trade History (Internal)</h2>
-      <div id="logEntries"></div>
-    </div>
-  </div>
-</div>
+  <script>
+    const deadline = new Date(2026, 7, 31, 23, 59, 59);
+    const pad = (number) => String(number).padStart(2, "0");
 
-<script>
-  const steps = document.querySelectorAll('.step');
-  const mstatus = document.getElementById('mstatus');
-  const alertBox = document.getElementById('execution-alert');
-
-  function updateStatus() {
-    const checkedCount = Array.from(steps).filter(s => s.checked).length;
-    const total = steps.length;
-    
-    if (checkedCount === total) {
-      mstatus.innerText = "GO";
-      mstatus.style.color = "var(--green)";
-      alertBox.style.display = "block";
-    } else {
-      mstatus.innerText = `${checkedCount} / ${total} READY`;
-      mstatus.style.color = "var(--ink)";
-      alertBox.style.display = "none";
+    function updateCountdown() {
+      const remaining = Math.max(0, deadline - new Date());
+      document.getElementById("days").textContent = pad(Math.floor(remaining / 86400000));
+      document.getElementById("hours").textContent = pad(Math.floor((remaining % 86400000) / 3600000));
+      document.getElementById("minutes").textContent = pad(Math.floor((remaining % 3600000) / 60000));
+      document.getElementById("seconds").textContent = pad(Math.floor((remaining % 60000) / 1000));
     }
-  }
 
-  steps.forEach(step => step.addEventListener('change', updateStatus));
-
-  function saveTrade() {
-    const tradeData = {
-      date: new Date().toLocaleString(),
-      entry: document.getElementById('entryModel').value,
-      htf: document.getElementById('htfLogic').value,
-      psy: document.getElementById('emotions').value,
-      better: document.getElementById('improvements').value
-    };
-
-    // Save to LocalStorage
-    let history = JSON.parse(localStorage.getItem('fex_history') || '[]');
-    history.unshift(tradeData);
-    localStorage.setItem('fex_history', JSON.stringify(history));
-    
-    renderLog();
-    alert("Trade captured in internal log.");
-  }
-
-  function renderLog() {
-    const history = JSON.parse(localStorage.getItem('fex_history') || '[]');
-    const container = document.getElementById('logEntries');
-    container.innerHTML = history.map(t => `
-      <div class="log-entry">
-        <strong>${t.date}</strong> | Model: ${t.entry}<br>
-        <small>HTF: ${t.htf}</small><br>
-        <small>Psych: ${t.psy}</small>
-      </div>
-    `).join('');
-  }
-
-  function resetAll() {
-    if(confirm("Clear all fields for the next setup?")) {
-      document.querySelectorAll('input, textarea').forEach(el => {
-        if(el.type === 'checkbox') el.checked = false;
-        else el.value = '';
-      });
-      updateStatus();
-    }
-  }
-
-  // Clock
-  setInterval(() => {
-    const d = new Date();
-    document.getElementById('clock').innerText = d.toLocaleTimeString();
-    document.getElementById('date').innerText = d.toLocaleDateString();
-  }, 1000);
-
-  window.onload = renderLog;
-</script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    updateCountdown();
+    window.setInterval(updateCountdown, 1000);
+  </script>
 </body>
 </html>
-
-Key Improvements Made:
-
-1.  Redundancy Filter: I merged several questions into textarea blocks (e.g.,
-    "Emotions: Pre/During/After" is now one field). This allows you to write
-    naturally rather than clicking 50 small boxes, which can be annoying when
-    you are in "the zone."
-2.  Internal Log: The "Trade History" section at the bottom saves to your
-    browser's LocalStorage. This means even if you refresh the page, your past
-    trades for the session stay there.
-3.  Visual Logic:
-      - The Go/No-Go: The background color of the header status changes only
-        when your process is fully checked.
-      - The Execution Alert: Only pops up when you have confirmed both the
-        technicals and the risk.
-4.  Screenshot Friendly: The layout uses a clean white-on-grey background (your
-    chart colors) so that if you take a screenshot of your screen, the checklist
-    looks professional and matches your charts perfectly.
-
-How to use the Screenshot feature: I didn't add a "Download" button because
-browser-based screenshots often cut out the styling. The best way is to use
-Cmd+Shift+4 (Mac) or Win+Shift+S (Windows) once the "Execution Time" message
-appears!
